@@ -48,37 +48,39 @@
 <template>
   <div class="container spacing-playground pa-6" fluid>
     <v-row>
-      <v-col
-        v-for="network in networks"
-        cols="12"
-        md="4"
-      >
-        <v-card>
-          <template v-slot:title>{{ network.charge_point.serial_number }}</template>
-          <template v-slot:subtitle>{{ network.charge_point.ocpp_version }}</template>
-          <template v-slot:text>
-            <v-btn
-              :color="getActiveColor(network.charge_point.is_active)"
-              icon="mdi-lan"
-              size="x-small"
-              variant ="outlined"
-            />
-          </template>
-          <v-divider></v-divider>
-          <template
-            v-if="network.charge_point.connectors.length"
-            v-slot:actions
-          >
-            <v-btn
-              v-for="connector in network.charge_point.connectors"
-              :icon="getActiveIcon(connector.is_active)"
-              :color="getActiveColor(connector.is_active)"
-              size="x-small"
-              variant ="outlined"
-            />
-          </template>
-        </v-card>
-      </v-col>
+      <template v-for="network in networks">
+        <v-col
+          v-if="network?.charge_point"
+          cols="12"
+          md="4"
+        >
+          <v-card>
+            <template v-slot:title>{{ network.charge_point.serial_number }}</template>
+            <template v-slot:subtitle>{{ network.charge_point.ocpp_version }}</template>
+            <template v-slot:text>
+              <v-btn
+                :color="getActiveColor(network.charge_point.is_active)"
+                icon="mdi-lan"
+                size="x-small"
+                variant ="outlined"
+              />
+            </template>
+            <v-divider></v-divider>
+            <template
+              v-if="network.charge_point?.connectors.length"
+              v-slot:actions
+            >
+              <v-btn
+                v-for="connector in network.charge_point.connectors"
+                :icon="getActiveIcon(connector.is_active)"
+                :color="getActiveColor(connector.is_active)"
+                size="x-small"
+                variant ="outlined"
+              />
+            </template>
+          </v-card>
+        </v-col>
+      </template>
     </v-row>
   </div>
 </template>

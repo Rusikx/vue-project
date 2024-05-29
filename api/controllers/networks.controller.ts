@@ -112,24 +112,26 @@ exports.allCascade = async (req, res) => {
 
 exports.activate = async (req, res) => {
     try {
-        console.log(1)
-        const response = await Networks.update(
-            {
-                where: { is_active: false },
-                limit: 1,
-                order: [["createdAt", "DESC"]]
-            },
-            { is_active: true }
-        ).then(network => {
-            console.log(2)
-            ChargePoint.update(
-                {
-                    where: { network_id: network.id }
-                },
-                { is_active: true }
-            )
+        const response = await ChargePoint.findAll({
+            where: { is_active: false },
+            order: [["createdAt", "DESC"]],
+            limit: 1
+        }).then(chargePointer => {
+            if (chargePointer.length) {
+                Networks.update(
+                    { is_active: true },
+                    {
+                        where: { id: chargePointer[0].dataValues.network_id },
+                    }
+                )
+                ChargePoint.update(
+                    { is_active: true },                
+                    {
+                        where: { id: chargePointer[0].dataValues.id }
+                    }
+                )
+            }
         })
-        console.log(3)
 
         res.send(response)
     } catch (err) {
@@ -139,20 +141,25 @@ exports.activate = async (req, res) => {
 
 exports.deactivate = async (req, res) => {
     try {
-        const response = await Networks.update(
-            {
-                where: { is_active: true },
-                limit: 1,
-                order: [["createdAt", "DESC"]]
-            },
-            { is_active: false }
-        ).then(network => {
-            ChargePoint.update(
-                {
-                    where: { network_id: network.id }
-                },
-                { is_active: false }
-            )
+        const response = await ChargePoint.findAll({
+            where: { is_active: true },
+            order: [["createdAt", "DESC"]],
+            limit: 1
+        }).then(chargePointer => {
+            if (chargePointer.length) {
+                Networks.update(
+                    { is_active: false },
+                    {
+                        where: { id: chargePointer[0].dataValues.network_id },
+                    }
+                )
+                ChargePoint.update(
+                    { is_active: false },                
+                    {
+                        where: { id: chargePointer[0].dataValues.id }
+                    }
+                )
+            }
         })
 
         res.send(response)
