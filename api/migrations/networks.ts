@@ -1,23 +1,20 @@
 const db = require("./../models/connect.models.ts");
 
 db.networks = require("../models/networks.model.ts")(db.sequelize, db.Sequelize);
-db.charge_points = require("../models/charge_points.model.ts")(db.sequelize, db.Sequelize);
+db.charge_point = require("../models/charge_points.model.ts")(db.sequelize, db.Sequelize);
 db.connectors = require("../models/connectors.model.ts")(db.sequelize, db.Sequelize);
 
-// db.networks.hasOne(db.charge_points, {
-//     foreignKey: "network_id"
-// });
-// db.networks.belongsTo(db.charge_points);
-
 // const db = require("./../models/index.ts");
-const networks = db.networks;
+const Networks = db.networks;
+const ChargePoint = db.charge_point;
+const Connectors = db.connectors;
 
-// chargePointerVendor: '' // vendor
-// chargePointerModel: '' // model
-// chargeBoxSerialNumber: '192.168.1.187:9000' // 
-// chargePointerSerialNumber: '' // serial_number
-// firmwareVersion: '' // ocpp_version
-// iccid: ''
-// imsi: ''
-// meterSerialNumber: ''
-// meterType: ''
+Networks.hasOne(ChargePoint, {
+    foreignKey: "network_id"
+});
+ChargePoint.belongsTo(Networks);
+
+ChargePoint.hasMany(Connectors, {
+    foreignKey: "charge_point_id"
+});
+Connectors.belongsTo(ChargePoint);

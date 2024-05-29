@@ -17,7 +17,7 @@ exports.sendCommand = (data) => {
   let message;
 
   switch (command) {
-    case "BootNotification": // BootNotification
+    case "BootNotification":
       message = [
           indexCommand,
           key,
@@ -36,7 +36,7 @@ exports.sendCommand = (data) => {
         }
       }
       break;
-    case "Restart": // Heartbeat
+    case "Restart":
       message = [
           indexCommand,
           key,
@@ -187,6 +187,16 @@ exports.sendCommand = (data) => {
             "currentTime": "datetime"
           }
       ]
+
+      try {
+        axios.get(process.env.VITE_SERVER_HOST + "/api/network/activate", data);
+
+        setTimeout(() => {
+          axios.get(process.env.VITE_SERVER_HOST + "/api/network/deactivate", data);
+        }, 60000)
+      } catch (err) {
+        console.log(err);
+      }
       break;
     case "MeterValues":
       message = [

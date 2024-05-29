@@ -9,6 +9,15 @@ class NetworkService {
     all() {
         return axios.post(API_URL + "all");
     }
+    allCascade() {
+        return axios.post(API_URL + "all-cascade");
+    }
+    activate() {
+        return axios.get(API_URL + "activate");
+    }
+    deactivate() {
+        return axios.get(API_URL + "deactivate");
+    }
 }
 
 export default new NetworkService();

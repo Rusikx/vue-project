@@ -12,13 +12,13 @@ wsClient.on('open', () => {
     wsClient.send(JSON.stringify(response));
 });
 
-var i = true;
+var active = true;
 
 wsClient.on('message', (message) => {
     console.log(`Received message from server: ${message}`);
     const data = JSON.parse(message);
 
-    if (data[2].status === 'Accepted' && i) {
+    if (data[2].status === 'Accepted' && active) {
         wsClient.send(JSON.stringify([2, getId(), 'BootNotification', {
             chargePointerVendor: 'test',
             chargePointerModel: 'test',
@@ -30,11 +30,11 @@ wsClient.on('message', (message) => {
             meterSerialNumber: '181184951512',
             meterType: 'DC'
         }]));
-        i = false;
+        active = false;
         // console.log('BootNotification data');
 
         // let i = 0;
-        // while (i < 100) {
+        // while (i < 10) {
         //     (function(i) {
         //         setTimeout(() => {
         //             const response = [2, getId(), 'Heartbeat', {}]

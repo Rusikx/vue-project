@@ -9,8 +9,23 @@ module.exports = function(app) {
         controller.all
     );
     app.post(
+        "/api/network/all-cascade",
+        // [verifyToken, isAdmin],
+        controller.allCascade
+    );
+    app.post(
         "/api/network/create",
         // [verifyToken, isAdmin],
         controller.create
+    );
+    app.get(
+        "/api/network/activate",
+        // [verifyToken, isAdmin],
+        controller.activate
+    );
+    app.get(
+        "/api/network/deactivate",
+        // [verifyToken, isAdmin],
+        controller.deactivate
     );
 };

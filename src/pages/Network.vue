@@ -8,12 +8,20 @@
   
   const dataNetworkService = async () => {
     try {
-      const { data, success } = await NetworkService.all()
+      const { data } = await NetworkService.allCascade()
 
       networks.value = data
     } catch (err) {
       console.log(err)
     }
+  }
+
+  const getActiveIcon = (value: boolean) => {
+    return value ? "mdi-gas-station-outline" : "mdi-gas-station-off-outline"
+  }
+
+  const getActiveColor = (value: boolean) => {
+    return value ? "green-lighten-1" : "red-lighten-1"
   }
 
   onMounted(() => {
@@ -46,13 +54,28 @@
         md="4"
       >
         <v-card>
-          <template v-slot:title>{{ network.name }}</template>
-          <template v-slot:subtitle>This is a card subtitle</template>
+          <template v-slot:title>{{ network.charge_point.serial_number }}</template>
+          <template v-slot:subtitle>{{ network.charge_point.ocpp_version }}</template>
           <template v-slot:text>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus!
+            <v-btn
+              :color="getActiveColor(network.charge_point.is_active)"
+              icon="mdi-lan"
+              size="x-small"
+              variant ="outlined"
+            />
           </template>
-          <template v-slot:actions>
-            <v-btn icon="mdi-lan" variant ="outlined" />
+          <v-divider></v-divider>
+          <template
+            v-if="network.charge_point.connectors.length"
+            v-slot:actions
+          >
+            <v-btn
+              v-for="connector in network.charge_point.connectors"
+              :icon="getActiveIcon(connector.is_active)"
+              :color="getActiveColor(connector.is_active)"
+              size="x-small"
+              variant ="outlined"
+            />
           </template>
         </v-card>
       </v-col>
