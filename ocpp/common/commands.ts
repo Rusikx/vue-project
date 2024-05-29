@@ -29,17 +29,6 @@ exports.sendCommand = (data) => {
       ];
 
       if (content && content.iccid) {
-        // const classNetworkService = new NetworkService();
-        // NetworkService.create(content);
-        // (async () => {
-        //   let response = async () => await axios.post(process.env.VITE_SERVER_HOST + "/api/network/create", data);
-
-        //   response.then((res) => {
-        //     console.log(res);
-        //   }).catch((error) => {
-        //     console.log(error);
-        //   })
-        // })
         try {
           axios.post(process.env.VITE_SERVER_HOST + "/api/network/create", data);
         } catch (err) {

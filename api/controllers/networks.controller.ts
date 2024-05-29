@@ -4,11 +4,6 @@ db.networks = require("./../models/networks.model.ts")(db.sequelize, db.Sequeliz
 db.charge_pointer = require("./../models/charge_points.model.ts")(db.sequelize, db.Sequelize);
 db.connectors = require("./../models/connectors.model.ts")(db.sequelize, db.Sequelize);
 
-// db.networks.hasOne(db.charge_points, {
-//     foreignKey: "network_id"
-// });
-// db.charge_points.belongsTo(db.networks);
-
 const Networks = db.networks;
 const ChargePointer = db.charge_pointer;
 const Connectors = db.connectors;
