@@ -28,13 +28,13 @@ exports.create = (req, res) => {
             is_active: false
         }).then(network => {
             ChargePoint.findOrCreate({
-                where: { serial_number: data.chargePointerSerialNumber },
+                where: { serial_number: data.meterSerialNumber },
                 defaults: {
                     status: "test",
-                    vendor: data.chargePointerVendor,
-                    location: "test",
-                    model: data.chargePointerModel,
-                    serial_number: data.chargePointerSerialNumber,
+                    vendor: data.chargePointVendor,
+                    location: data.chargeBoxSerialNumber,
+                    model: data.chargePointModel,
+                    serial_number: data.meterSerialNumber,
                     ocpp_version: data.firmwareVersion,
                     network_id: network.dataValues.id,
                     // error_code: "",
@@ -53,6 +53,15 @@ exports.create = (req, res) => {
         res.status(500).send({ message: err.message });
     };
 }
+// chargePointVendor: '',
+// chargePointModel: '',
+// chargeBoxSerialNumber: '192.168.1.127:443',
+// chargePointSerialNumber: '5656',
+// firmwareVersion: '140c10a-102104155118118-01043219-',
+// iccid: '8931080019083732769',
+// imsi: '204080819138795',
+// meterSerialNumber: '181184951512',
+// meterType: 'DC'
 
 exports.all = async (req, res) => {
     try {

@@ -20,6 +20,7 @@ function onConnect(wsClient) {
         try {
             // console.log('Пользователь отправил');
             const data = JSON.parse(message);
+            console.log(data)
             // console.log(data);
             const sendResponse = sendCommand(data);
             // console.log(sendResponse)
