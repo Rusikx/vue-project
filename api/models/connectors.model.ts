@@ -1,10 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
     const Connectors = sequelize.define("connectors", {
-        status: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
-        charge_point_id: {
+        connector_id: {
             type: Sequelize.INTEGER,
             allowNull: false
         },
@@ -12,10 +8,26 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: true
         },
-        is_active: {
-            type: Sequelize.BOOLEAN,
-            allowNull: true
-        }
+        status: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        vendor_id: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        vendor_error_code: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        // charge_point_id: {
+        //     type: Sequelize.INTEGER,
+        //     allowNull: false
+        // },
+        // is_active: {
+        //     type: Sequelize.BOOLEAN,
+        //     allowNull: true
+        // }
     });
 
     return Connectors;

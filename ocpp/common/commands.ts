@@ -1,5 +1,6 @@
 // const NetworkService = require("./../../api/services/network.service.ts");
-const { OCPPDate } = require( "./help-functions.ts");
+const { OCPPDate } = require("./help-functions.ts");
+const { STATUS_ACCEPTED } = require("./../../api/constans/index.ts")
 const axios = require("axios");
 require('dotenv').config();
 
@@ -10,7 +11,8 @@ require('dotenv').config();
 //  */
 
 exports.sendCommand = (data) => {
-  const indexCommand = 3;
+  const defaultIndex = 2;
+  const createIndex = 3;
   const content = data[3];
   const command = data[2];
   const key = data[1];
@@ -19,18 +21,18 @@ exports.sendCommand = (data) => {
   switch (command) {
     case "BootNotification":
       message = [
-          indexCommand,
+          createIndex,
           key,
           {
-            "status": "Accepted",
-            "interval": 30,
+            "status": STATUS_ACCEPTED,
+            "interval": process.env.VITE_WS_INTERVAL || 30,
             "currentTime": OCPPDate()
           }
       ];
 
       if (content && content.iccid) {
         try {
-          axios.post(process.env.VITE_SERVER_HOST + "/api/network/create", data);
+          axios.post(process.env.VITE_SERVER_HOST + "/api/charge-point/create", data);
         } catch (err) {
           console.log(err);
         }
@@ -38,7 +40,7 @@ exports.sendCommand = (data) => {
       break;
     case "Restart":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             "currentTime": OCPPDate()
@@ -47,7 +49,7 @@ exports.sendCommand = (data) => {
       break;
     case "CancelReservation":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             // "reservationId": 1
@@ -57,7 +59,7 @@ exports.sendCommand = (data) => {
       break;
     case "ChangeAvailability":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             "status": "Accepted"
@@ -68,7 +70,7 @@ exports.sendCommand = (data) => {
       break;
     case "ChangeConfiguration":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             "status": "Accepted"
@@ -79,7 +81,7 @@ exports.sendCommand = (data) => {
       break;
     case "ClearCache":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             "status": "Accepted"
@@ -88,7 +90,7 @@ exports.sendCommand = (data) => {
       break;
     case "ClearChargingProfile":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             "status": "Accepted"
@@ -101,7 +103,7 @@ exports.sendCommand = (data) => {
       break;
     case "DataTransfer":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             "status": "Accepted",
@@ -114,7 +116,7 @@ exports.sendCommand = (data) => {
       break;
     case "DiagnosticsStatusNotification":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             // "status": "Accepted"
@@ -123,7 +125,7 @@ exports.sendCommand = (data) => {
       break;
     case "FirmwareStatusNotification":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             // "status": "Accepted"
@@ -132,7 +134,7 @@ exports.sendCommand = (data) => {
       break;
     case "GetCompositeSchedule":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             "status": "Accepted",
@@ -147,7 +149,7 @@ exports.sendCommand = (data) => {
       break;
     case "GetConfiguration":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             "configurationKey": "",
@@ -158,7 +160,7 @@ exports.sendCommand = (data) => {
       break;
     case "GetDiagnostics":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             "fileName": ""
@@ -172,7 +174,7 @@ exports.sendCommand = (data) => {
       break;
     case "GetLocalListVersion":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             "listVersion": 1
@@ -181,18 +183,18 @@ exports.sendCommand = (data) => {
       break;
     case "Heartbeat":
       message = [
-          indexCommand,
+         defaultIndex,
           key,
           {
             "currentTime": "datetime"
           }
-      ]
+      ];
 
       try {
-        axios.get(process.env.VITE_SERVER_HOST + "/api/network/activate", data);
+        axios.get(process.env.VITE_SERVER_HOST + "/api/charge-point/activate", data);
 
         setTimeout(() => {
-          axios.get(process.env.VITE_SERVER_HOST + "/api/network/deactivate", data);
+          axios.get(process.env.VITE_SERVER_HOST + "/api/charge-point/deactivate", data);
         }, 60000)
       } catch (err) {
         console.log(err);
@@ -200,7 +202,7 @@ exports.sendCommand = (data) => {
       break;
     case "MeterValues":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             // "connectorId": 1
@@ -211,7 +213,7 @@ exports.sendCommand = (data) => {
       break;
     case "RemoteStartTransaction":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             "status": "Accepted"
@@ -223,7 +225,7 @@ exports.sendCommand = (data) => {
       break;
     case "RemoteStopTransaction":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             "status": "Accepted"
@@ -233,7 +235,7 @@ exports.sendCommand = (data) => {
       break;
     case "ReserveNow":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             "status": "Accepted"
@@ -247,7 +249,7 @@ exports.sendCommand = (data) => {
       break;
     case "Reset":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             "status": "Accepted"
@@ -257,7 +259,7 @@ exports.sendCommand = (data) => {
       break;
     case "SendLocalList":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             "status": "Accepted"
@@ -269,7 +271,7 @@ exports.sendCommand = (data) => {
       break;
     case "SetChargingProfile":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             "status": "Accepted"
@@ -280,7 +282,7 @@ exports.sendCommand = (data) => {
       break;
     case "StartTransaction":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             "idTagInfo": "",
@@ -295,7 +297,7 @@ exports.sendCommand = (data) => {
       break;
     case "StatusNotification":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             // "connectorId": 1,
@@ -306,11 +308,17 @@ exports.sendCommand = (data) => {
             // "vendorId": "",
             // "vendorErrorCode": ""
           }
-      ]
+      ];
+
+      try {
+        axios.get(process.env.VITE_SERVER_HOST + "/api/charge-point/create", data);
+      } catch (err) {
+        console.log(err);
+      }
       break;
     case "StopTransaction":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             "idTagInfo": ""
@@ -325,7 +333,7 @@ exports.sendCommand = (data) => {
       break;
     case "TriggerMessage":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             "status": "Accepted"
@@ -336,7 +344,7 @@ exports.sendCommand = (data) => {
       break;
     case "UnlockConnector":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             "status": "Accepted"
@@ -346,7 +354,7 @@ exports.sendCommand = (data) => {
       break;
     case "UpdateFirmware":
       message = [
-          indexCommand,
+          defaultIndex,
           key,
           {
             // "location": "",

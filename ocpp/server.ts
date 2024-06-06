@@ -1,4 +1,5 @@
 const WebSocket = require("ws");
+const url = require("url");
 const { sendCommand } = require("./common/commands.ts");
 // const NetworkService = require("./../api/services/network.service.ts");
 require('dotenv').config();
@@ -7,8 +8,9 @@ const wsServer = new WebSocket.Server({ port: process.env.VITE_WS_PORT});
 
 wsServer.on('connection', onConnect);
 
-function onConnect(wsClient) {
+function onConnect(wsClient, req) {
     // wsClient.send('accepted');
+    const queryParams = url.parse(req.url, true).query
 
     wsClient.on('close', function() {
         console.log('Пользователь отключился');
@@ -19,15 +21,16 @@ function onConnect(wsClient) {
     wsClient.on('message', function(message) {
         try {
             // console.log('Пользователь отправил');
-            const data = JSON.parse(message);
-            console.log(data)
-            // console.log(data);
-            const sendResponse = sendCommand(data);
-            // console.log(sendResponse)
+            const data = { ... JSON.parse(message), ...queryParams };
+            // console.log(data)
+            if (data.point) {
+                const sendResponse = sendCommand(data);
+                // console.log(sendResponse)
 
-            if (sendResponse !== null) {
-                // NetworkService.create(data);
-                wsClient.send(sendResponse);
+                if (sendResponse !== null) {
+                    // NetworkService.create(data);
+                    wsClient.send(sendResponse);
+                }
             }
             // if (data[2] === "BootNotification") {
             //  const response = [3, data[1], {'status': 'Accepted', 'interval': 20, 'currentTime': currentDate}]

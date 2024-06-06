@@ -1,7 +1,7 @@
 const { verifyToken, isModerator, isAdmin } = require("./../middleware/authJwt.ts");
-const controller = require("./../controllers/networks.controller.ts");
+const controller = require("./../controllers/charge_point.controller.ts");
 
-const API_URL = "/api/network/";
+const API_URL = "/api/charge-point/";
 
 module.exports = function(app) {
     app.post(
