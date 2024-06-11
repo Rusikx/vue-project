@@ -15,6 +15,6 @@ const Connectors = db.connectors;
 // ChargePoint.belongsTo(Networks);
 
 ChargePoint.hasMany(Connectors, {
-    foreignKey: "charge_point_id"
+  foreignKey: "charge_point_id"
 });
 Connectors.belongsTo(ChargePoint);

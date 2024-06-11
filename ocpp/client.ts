@@ -21,6 +21,8 @@ wsClient.on('message', (message) => {
     const data = JSON.parse(message);
 
     if (data[2].status === 'Accepted' && active) {
+        active = false;
+
         wsClient.send(JSON.stringify([2, getId(), 'BootNotification', {
             chargePointVendor: '',
             chargePointModel: '',
@@ -48,7 +50,6 @@ wsClient.on('message', (message) => {
             vendorId: '',
             vendorErrorCode: '0x0000000000000000'
         }]));
-        active = false;
         // console.log('BootNotification data');
 
         let i = 0;

@@ -1,6 +1,6 @@
 // const NetworkService = require("./../../api/services/network.service.ts");
 const { OCPPDate } = require("./help-functions.ts");
-const { STATUS_ACCEPTED } = require("./../../api/constans/index.ts")
+const { STATUS_ACCEPTED } = require("../constans/index.ts")
 const axios = require("axios");
 require('dotenv').config();
 
@@ -21,16 +21,16 @@ exports.sendCommand = (data) => {
   switch (command) {
     case "BootNotification":
       message = [
-          createIndex,
-          key,
-          {
-            "status": STATUS_ACCEPTED,
-            "interval": process.env.VITE_WS_INTERVAL || 30,
-            "currentTime": OCPPDate()
-          }
+        createIndex,
+        key,
+        {
+          "status": STATUS_ACCEPTED,
+          "interval": process.env.VITE_WS_INTERVAL || 30,
+          "currentTime": OCPPDate()
+        }
       ];
-
-      if (content && content.iccid) {
+      
+      if (content && content.chargePointSerialNumber) {
         try {
           axios.post(process.env.VITE_SERVER_HOST + "/api/charge-point/create", data);
         } catch (err) {
@@ -43,7 +43,8 @@ exports.sendCommand = (data) => {
           defaultIndex,
           key,
           {
-            "currentTime": OCPPDate()
+            "currentTime": OCPPDate(),
+            "point": data.point
           }
       ]
       break;
@@ -183,11 +184,11 @@ exports.sendCommand = (data) => {
       break;
     case "Heartbeat":
       message = [
-         defaultIndex,
-          key,
-          {
-            "currentTime": "datetime"
-          }
+        defaultIndex,
+        key,
+        {
+          "currentTime": "datetime"
+        }
       ];
 
       try {
@@ -252,7 +253,8 @@ exports.sendCommand = (data) => {
           defaultIndex,
           key,
           {
-            "status": "Accepted"
+            "status": "Accepted",
+            "point": data.point
             // "type": "Hard"
           }
       ]
@@ -297,21 +299,21 @@ exports.sendCommand = (data) => {
       break;
     case "StatusNotification":
       message = [
-          defaultIndex,
-          key,
-          {
-            // "connectorId": 1,
-            // "errorCode": "",
-            // "info": "",
-            // "status": "",
-            // "timestamp": "datetime",
-            // "vendorId": "",
-            // "vendorErrorCode": ""
-          }
+        defaultIndex,
+        key,
+        {
+          // "connectorId": 1,
+          // "errorCode": "",
+          // "info": "",
+          // "status": "",
+          // "timestamp": "datetime",
+          // "vendorId": "",
+          // "vendorErrorCode": ""
+        }
       ];
 
       try {
-        axios.get(process.env.VITE_SERVER_HOST + "/api/charge-point/create", data);
+        axios.post(process.env.VITE_SERVER_HOST + "/api/connector/create", data);
       } catch (err) {
         console.log(err);
       }

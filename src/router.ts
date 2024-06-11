@@ -6,6 +6,7 @@ import Register from "./pages/Register.vue";
 // lazy-loaded
 const Profile = () => import("./pages/Profile.vue");
 const Network = () => import("./pages/Network.vue");
+const ChargePoint = () => import("./pages/ChargePoint.vue");
 // const BoardAdmin = () => import("./pages/BoardAdmin.vue");
 // const BoardModerator = () => import("./pages/BoardModerator.vue");
 const BoardUser = () => import("./pages/BoardUser.vue");
@@ -47,6 +48,12 @@ const router = createRouter({
       name: "network",
       // lazy-loaded
       component: Network,
+    },
+    {
+      path: "/charge-point",
+      name: "charge-point",
+      // lazy-loaded
+      component: ChargePoint,
     },
     // {
     //   path: "/admin",

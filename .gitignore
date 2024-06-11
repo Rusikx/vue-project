@@ -7,9 +7,6 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Config env
-.env
-
 node_modules
 .DS_Store
 dist
@@ -23,6 +20,7 @@ coverage
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+.env
 .idea
 *.suo
 *.ntvs*

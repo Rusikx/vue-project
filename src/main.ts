@@ -17,7 +17,7 @@ const pinia = createPinia();
 
 // api.mount('#api')
 createApp(App)
-    .use(pinia)
-    .use(vuetify)
-    .use(router)
-    .mount("#app");
+  .use(pinia)
+  .use(vuetify)
+  .use(router)
+  .mount("#app");
