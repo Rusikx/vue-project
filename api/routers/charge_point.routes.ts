@@ -31,6 +31,11 @@ module.exports = function(app) {
     // [verifyToken, isAdmin],
     controller.deactivate
   );
+  app.post(
+    API_URL + "heartbeat",
+    // [verifyToken, isAdmin],
+    controller.heartbeat
+  );
 
   // For ws
   app.post(
@@ -42,5 +47,10 @@ module.exports = function(app) {
     API_URL + "reset-out",
     // [verifyToken, isAdmin],
     controllerOut.reset
+  );
+  app.post(
+    API_URL + "heartbeat-out",
+    // [verifyToken, isAdmin],
+    controllerOut.heartbeat
   );
 };

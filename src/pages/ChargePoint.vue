@@ -62,7 +62,7 @@
             <template v-slot:subtitle>{{ chargePoint.firmware_version }}</template>
             <template v-slot:text>
               <v-btn
-                :color="getActiveColor(chargePoint.status)"
+                :color="getActiveColor(chargePoint.is_active)"
                 icon="mdi-lan"
                 size="x-small"
                 variant ="outlined"

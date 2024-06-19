@@ -23,7 +23,7 @@ exports.create = async (req, res) => {
         charge_point_serial_number: req.body.point
       }
     }).then(chargePoint => {
-      Connectors.findOrCreate({
+      return Connectors.findOrCreate({
         where: {
           connector_id: data.connectorId || 0
         },
@@ -58,3 +58,13 @@ exports.all = async (req, res) => {
     res.status(500).send({ message: err.message });
   };
 }
+
+// exports.active = async (req, res) => {
+//   try {
+//     const response = await Connectors.findAll()
+
+//     res.send(response)
+//   } catch (err) {
+//     res.status(500).send({ message: err.message });
+//   };
+// }

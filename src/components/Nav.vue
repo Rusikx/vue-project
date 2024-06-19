@@ -54,7 +54,7 @@ export default {
       <v-list-item v-if="currentUser" prepend-icon="mdi-user" title="User" value="user" to="/user" link></v-list-item>
   
       <v-list-item prepend-icon="mdi-network" title="Network" value="network" to="/network" link></v-list-item>
-      <v-list-item prepend-icon="mdi-gas-station-in-use" title="Charge Point" value="charge-point" to="/charge-point" link></v-list-item>
+      <v-list-item prepend-icon="mdi-gas-station" title="Charge Point" value="charge-point" to="/charge-point" link></v-list-item>
     </v-list>
     <template v-slot:append>
       <div class="pa-2">

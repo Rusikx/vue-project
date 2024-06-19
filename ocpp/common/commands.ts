@@ -1,7 +1,8 @@
 // const NetworkService = require("./../../api/services/network.service.ts");
 const { OCPPDate } = require("./help-functions.ts");
-const { STATUS_ACCEPTED } = require("../constans/index.ts")
+const { STATUS_ACCEPTED } = require("../constans/index.ts");
 const axios = require("axios");
+const WebSocket = require("ws");
 require('dotenv').config();
 
 // /**
@@ -32,7 +33,9 @@ exports.sendCommand = (data) => {
       
       if (content && content.chargePointSerialNumber) {
         try {
-          axios.post(process.env.VITE_SERVER_HOST + "/api/charge-point/create", data);
+          axios.post(process.env.VITE_SERVER_HOST + "/api/charge-point/create", data).then(() => {
+            axios.post(process.env.VITE_SERVER_HOST + "/api/charge-point/heartbeat-out", data);
+          });
         } catch (err) {
           console.log(err);
         }
@@ -187,16 +190,31 @@ exports.sendCommand = (data) => {
         defaultIndex,
         key,
         {
-          "currentTime": "datetime"
+          "currentTime": OCPPDate(),
+          "point": data.point
         }
       ];
 
       try {
-        axios.get(process.env.VITE_SERVER_HOST + "/api/charge-point/activate", data);
+        const wsClient = new WebSocket(
+          process.env.VITE_SERVER_WS_HOST + "?point=" + data.point + "&command=heartbeat"
+        );
+    
+        wsClient.on('open', () => {
+            const response = [2, 'heartbeat-' + data.point, 'Heartbeat']
+        
+            wsClient.send(JSON.stringify(response));
+            wsClient.terminate()
+        });
 
-        setTimeout(() => {
-          axios.get(process.env.VITE_SERVER_HOST + "/api/charge-point/deactivate", data);
-        }, 60000)
+        // axios.post(process.env.VITE_SERVER_HOST + "/api/charge-point/heartbeat-out", data);
+        // axios.post(process.env.VITE_SERVER_HOST + "/api/charge-point/heartbeat", data);
+
+        // axios.get(process.env.VITE_SERVER_HOST + "/api/charge-point/activate", data);
+
+        // setTimeout(() => {
+        //   axios.get(process.env.VITE_SERVER_HOST + "/api/charge-point/deactivate", data);
+        // }, 60000)
       } catch (err) {
         console.log(err);
       }

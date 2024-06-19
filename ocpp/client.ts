@@ -52,16 +52,18 @@ wsClient.on('message', (message) => {
         }]));
         // console.log('BootNotification data');
 
-        let i = 0;
-        // while (i < 10) {
-        //     (function(i) {
-        //         setTimeout(() => {
-        //             const response = [2, getId(), 'Heartbeat', {}]
+        setTimeout(() => {
+            let i = 0;
+            while (i < 1) {
+                (function(i) {
+                    setTimeout(() => {
+                        const response = [2, getId(), 'Heartbeat', {}]
 
-        //             wsClient.send(JSON.stringify(response));
-        //         }, 1000 * i)
-        //     })(i++)
-        // }
+                        wsClient.send(JSON.stringify(response));
+                    }, 1000 * i)
+                })(i++)
+            }
+        }, 1000)
     }
 });
 
