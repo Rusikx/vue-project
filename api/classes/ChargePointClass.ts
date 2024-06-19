@@ -2,10 +2,17 @@ const WebSocket = require("ws")
 const url = require("url")
 const db = require("./../../api/models/connect.models.ts")
 db.charge_point = require("./../../api/models/charge_points.model.ts")(db.sequelize, db.Sequelize)
+db.connectors = require("./../models/connectors.model.ts")(db.sequelize, db.Sequelize);
 
 const { STATUS_AVAILABLE, STATUS_UNAVAILABLE } = require("./../../api/constans/index.ts")
 
 const ChargePoint = db.charge_point
+const Connectors = db.connectors
+
+ChargePoint.hasMany(Connectors, {
+  foreignKey: "charge_point_id"
+})
+Connectors.belongsTo(ChargePoint)
 
 // const wsServerStart = (() => {
 //   return new WebSocket.Server({ port: process.env.VITE_SERVER_WS_PORT})
@@ -107,7 +114,7 @@ class ChargePointClass {
   }
 
   // WS
-  heartbeat = (req, res) => {
+  heartbeat(req, res) {
     const data = req.body
   
     try {
@@ -123,6 +130,27 @@ class ChargePointClass {
     } catch (err) {
       res.status(500).send({ message: err.message })
     }
+  }
+
+  async dataAllCascade(req, res) {
+    let response = []
+
+    try {
+      const wsClient = wsClientStart('', "data")
+      
+      wsClient.on('open', () => {
+          const query = [2, 'data-0', 'Data']
+          wsClient.send(JSON.stringify(query))
+      })
+
+      await wsClient.on('message', (message) => {
+        response = message
+      })
+    } catch (err) {
+      res.status(500).send({ message: err.message })
+    }
+
+    return response
   }
 }
 

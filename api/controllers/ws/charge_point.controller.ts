@@ -69,13 +69,17 @@ exports.heartbeat = (req, res) => {
           let response = false;
 
           switch (queryParams.command) {
-            case "data":
-              response = chargePointClass.allCascade()
-            break;
+            // case "data":
+            //   response = chargePointClass.allCascade()
+            // break;
             case "heartbeat":
               response = chargePointClass.activate(data)
             break;
           }
+
+          wsClient.send(JSON.stringify(response));
+        } else if (queryParams.command === "data") {
+          const response = chargePointClass.allCascade()
 
           wsClient.send(JSON.stringify(response));
         }

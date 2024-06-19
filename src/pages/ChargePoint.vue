@@ -1,16 +1,19 @@
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue'
-  import { storeToRefs } from 'pinia'
+  import { onMounted, ref } from "vue"
+  import { storeToRefs } from "pinia"
   import axios from "axios"
+  import WebSocket from "ws"
   import { useAuthModuleStore } from "./../stores/auth.module"
   import ChargePointService from "./../../api/services/charge_point.service.ts"
+  import ChargePointClass from "./../../api/classes/ChargePointClass.ts"
 
   const chargePoints = ref([])
   
   const dataChargePointService = async () => {
     try {
+      // const chargePointClass = new ChargePointClass()
+      // const { data } = chargePointClass.dataAllCascade()
       const { data } = await ChargePointService.allCascade()
-
       chargePoints.value = data
     } catch (err) {
       console.log(err)
