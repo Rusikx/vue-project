@@ -54,7 +54,7 @@ wsClient.on('message', (message) => {
 
         setTimeout(() => {
             let i = 0;
-            while (i < 1) {
+            while (i < 10) {
                 (function(i) {
                     setTimeout(() => {
                         const response = [2, getId(), 'Heartbeat', {}]

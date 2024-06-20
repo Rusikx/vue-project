@@ -11,6 +11,9 @@ require('dotenv').config();
 //  * @param { string } key
 //  */
 
+axios.post(process.env.VITE_SERVER_HOST + "/api/charge-point/heartbeat-out", {});
+// axios.get(process.env.VITE_SERVER_HOST + "/api/charge-point/data");
+
 exports.sendCommand = (data) => {
   const defaultIndex = 2;
   const createIndex = 3;
@@ -34,7 +37,7 @@ exports.sendCommand = (data) => {
       if (content && content.chargePointSerialNumber) {
         try {
           axios.post(process.env.VITE_SERVER_HOST + "/api/charge-point/create", data).then(() => {
-            axios.post(process.env.VITE_SERVER_HOST + "/api/charge-point/heartbeat-out", data);
+            // axios.post(process.env.VITE_SERVER_HOST + "/api/charge-point/heartbeat-out", data);
           });
         } catch (err) {
           console.log(err);

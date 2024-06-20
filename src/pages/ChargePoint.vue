@@ -2,7 +2,7 @@
   import { onMounted, ref } from "vue"
   import { storeToRefs } from "pinia"
   import axios from "axios"
-  import WebSocket from "ws"
+  // import WebSocket from "ws"
   import { useAuthModuleStore } from "./../stores/auth.module"
   import ChargePointService from "./../../api/services/charge_point.service.ts"
   import ChargePointClass from "./../../api/classes/ChargePointClass.ts"
@@ -11,10 +11,21 @@
   
   const dataChargePointService = async () => {
     try {
+      const wsClient = new WebSocket(import.meta.env.VITE_SERVER_WS_HOST + "?point=1&command=data")
+      
+      wsClient.addEventListener("open", () => {
+          const query = [2, "data-0", "Data"]
+          wsClient.send(JSON.stringify(query))
+      })
+
+      await wsClient.addEventListener("message", (message) => {
+        chargePoints.value = JSON.parse(message.data)
+      })
+
       // const chargePointClass = new ChargePointClass()
       // const { data } = chargePointClass.dataAllCascade()
-      const { data } = await ChargePointService.allCascade()
-      chargePoints.value = data
+      // const { data } = await ChargePointService.allCascade()
+      // chargePoints.value = data
     } catch (err) {
       console.log(err)
     }
@@ -30,10 +41,10 @@
     return res
   }
 
-  const getActiveColor = (value: string) => {
+  const getActiveColor = (value: string | boolean) => {
     let res = "red-lighten-1"
 
-    if (value === "Available") {
+    if (value === "Available" || value === true) {
       res = "green-lighten-1"
     }
 
@@ -54,7 +65,7 @@
 
 <template>
   <div class="container spacing-playground pa-6" fluid>
-    <v-row>
+    <v-row v-if="chargePoints.length">
       <template v-for="chargePoint in chargePoints">
         <v-col
           cols="12"

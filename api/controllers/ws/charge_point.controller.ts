@@ -64,34 +64,56 @@ exports.heartbeat = (req, res) => {
 
       wsClient.on('message', async (message) => {
         const params = { ... JSON.parse(message), ...queryParams };
+        console.log(params)
   
-        if (data.point === params.point) {
+        // if (data.point === params.point) {
+        if (params.point) {
           let response = false;
 
           switch (queryParams.command) {
-            // case "data":
-            //   response = chargePointClass.allCascade()
-            // break;
+            case "data":
+              response = await chargePointClass.allCascade()
+            break;
             case "heartbeat":
-              response = chargePointClass.activate(data)
+              response = await chargePointClass.activate(params)
             break;
           }
 
           wsClient.send(JSON.stringify(response));
-        } else if (queryParams.command === "data") {
-          const response = chargePointClass.allCascade()
-
-          wsClient.send(JSON.stringify(response));
         }
+
+        // if (queryParams.command === "data") {
+        //   const response = await chargePointClass.allCascade()
+  
+        //   wsClient.send(JSON.stringify(response));
+        // }
       })
 
       wsClient.on('close', async () => {
-        if (queryParams.command === "heartbeat") {
-          const response = chargePointClass.deactivate(data)
+        // if (queryParams.command === "heartbeat") {
+        //   const response = chargePointClass.deactivate(data)
   
-          wsClient.send(JSON.stringify(response));
-        }
+        //   wsClient.send(JSON.stringify(response));
+        // }
       });
+    })
+
+    res.send(true)
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  };
+}
+
+exports.data = (req, res) => {
+  try {
+    const wsServer = wsServerStart()
+
+    wsServer.on('connection', (wsClient, req) => {
+      wsClient.on('message', async () => {
+        const response = await chargePointClass.allCascade()
+
+        wsClient.send(JSON.stringify(response));
+      })
     })
 
     res.send(true)

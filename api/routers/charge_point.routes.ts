@@ -53,4 +53,9 @@ module.exports = function(app) {
     // [verifyToken, isAdmin],
     controllerOut.heartbeat
   );
+  app.get(
+    API_URL + "data",
+    // [verifyToken, isAdmin],
+    controllerOut.data
+  );
 };
