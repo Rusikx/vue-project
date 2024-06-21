@@ -2,9 +2,10 @@ const WebSocket = require("ws");
 const { OCPPDate, getId } = require( "./common/help-functions.ts");
 require('dotenv').config();
 
-const chargePointSerialNumber = "5656"
+const chargePointSerialNumber = "565655"
 
-const wsClient = new WebSocket(process.env.VITE_WS_HOST + "?point=" + chargePointSerialNumber);
+// const wsClient = new WebSocket(process.env.VITE_WS_HOST + "?point=" + chargePointSerialNumber);
+const wsClient = new WebSocket("ws://192.168.1.127:443////?point=" + chargePointSerialNumber);
 
 wsClient.on('open', () => {
     console.log('Connected to server');
@@ -54,7 +55,7 @@ wsClient.on('message', (message) => {
 
         setTimeout(() => {
             let i = 0;
-            while (i < 10) {
+            while (i < 1000) {
                 (function(i) {
                     setTimeout(() => {
                         const response = [2, getId(), 'Heartbeat', {}]

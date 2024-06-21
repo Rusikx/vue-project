@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { onMounted, ref } from "vue"
+  import { onMounted, onUnmounted, ref } from "vue"
   import { storeToRefs } from "pinia"
   import axios from "axios"
   // import WebSocket from "ws"
@@ -11,11 +11,22 @@
   
   const dataChargePointService = async () => {
     try {
-      const wsClient = new WebSocket(import.meta.env.VITE_SERVER_WS_HOST + "?point=1&command=data")
+      const wsClient = new WebSocket(import.meta.env.VITE_SERVER_WS_HOST + "?point=start&command=data")
       
       wsClient.addEventListener("open", () => {
-          const query = [2, "data-0", "Data"]
+          const query = [2, "data-start", "Start"]
+          let i = 0
+
           wsClient.send(JSON.stringify(query))
+          // const eachSend = setInterval(() => {
+          //   wsClient.send(JSON.stringify(query))
+          //   i++
+          //   console.log(i)
+          //   if (i === 1000) {
+          //     clearInterval(eachSend)
+          //     wsClient.close()
+          //   }
+          // }, parseInt(import.meta.env.VITE_WS_INTERVAL || 30))
       })
 
       await wsClient.addEventListener("message", (message) => {
@@ -54,13 +65,29 @@
   const restartChargePoint = (point: string) => {
     const API_URL = import.meta.env.VITE_SERVER_HOST + "/api/charge-point/";
 
-    axios.post(API_URL + "restart-out", { point: point });
-    // axios.post(API_URL + "reset-out", { point: point });
+    // axios.post(API_URL + "restart-out", { point: point });
+    axios.post(API_URL + "reset-out", { point: point });
   }
 
   onMounted(() => {
-    dataChargePointService()
+    // axios.post(import.meta.env.VITE_SERVER_HOST + "/api/charge-point/heartbeat-out", {}).then(() => {
+      dataChargePointService()
+    // })
   })
+
+  // onUnmounted(() => {
+  //   try {
+  //     const wsClientEnd = new WebSocket(import.meta.env.VITE_SERVER_WS_HOST + "?point=end&command=close")
+      
+  //     wsClientEnd.addEventListener("open", async () => {
+  //         const query = [2, "data-end", "End"]
+
+  //         await wsClientEnd.send(JSON.stringify(query))
+  //     })
+  //   } catch (err) {
+  //     console.log(err)
+  //   }
+  // })
 </script>
 
 <template>

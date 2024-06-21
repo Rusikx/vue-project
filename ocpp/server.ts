@@ -28,12 +28,15 @@ wsServer.on('connection', (wsClient, req) => {
 
         if (sendResponse !== null) {
           // NetworkService.create(data);
+          console.log(1, sendResponse);
           wsClient.send(sendResponse);
         }
 
-        if (data.point === response[2].point) {
-          wsClient.send(sendResponse);
-        }
+        // console.log(11, data.point === response[2].point)
+        // if (data.point === response[2].point) {
+          // console.log(sendResponse)
+          // wsClient.send(sendResponse);
+        // }
       }
     } catch (error) {
       wsClient.status(500).send({ message: error.message });

@@ -64,7 +64,7 @@ exports.heartbeat = (req, res) => {
 
       wsClient.on('message', async (message) => {
         const params = { ... JSON.parse(message), ...queryParams };
-        console.log(params)
+        // console.log(params)
   
         // if (data.point === params.point) {
         if (params.point) {
@@ -75,7 +75,11 @@ exports.heartbeat = (req, res) => {
               response = await chargePointClass.allCascade()
             break;
             case "heartbeat":
+              // console.log(111, data.point, params.point)
               response = await chargePointClass.activate(params)
+            break;
+            case "close":
+              wsClient.close()
             break;
           }
 
@@ -90,11 +94,13 @@ exports.heartbeat = (req, res) => {
       })
 
       wsClient.on('close', async () => {
-        // if (queryParams.command === "heartbeat") {
-        //   const response = chargePointClass.deactivate(data)
+        // console.log(222, queryParams.point, queryParams.command)
+        if (queryParams.command === "heartbeat" && queryParams.point) {
+          // console.log(333)
+          const response = chargePointClass.deactivate(queryParams)
   
-        //   wsClient.send(JSON.stringify(response));
-        // }
+          wsClient.send(JSON.stringify(response));
+        }
       });
     })
 

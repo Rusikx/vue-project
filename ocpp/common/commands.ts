@@ -1,5 +1,5 @@
 // const NetworkService = require("./../../api/services/network.service.ts");
-const { OCPPDate } = require("./help-functions.ts");
+const { OCPPDate, getId } = require("./help-functions.ts");
 const { STATUS_ACCEPTED } = require("../constans/index.ts");
 const axios = require("axios");
 const WebSocket = require("ws");
@@ -13,6 +13,9 @@ require('dotenv').config();
 
 axios.post(process.env.VITE_SERVER_HOST + "/api/charge-point/heartbeat-out", {});
 // axios.get(process.env.VITE_SERVER_HOST + "/api/charge-point/data");
+
+const timerInterval = parseInt(process.env.VITE_WS_INTERVAL) || 30;
+let outSideTimer = timerInterval;
 
 exports.sendCommand = (data) => {
   const defaultIndex = 2;
@@ -29,7 +32,7 @@ exports.sendCommand = (data) => {
         key,
         {
           "status": STATUS_ACCEPTED,
-          "interval": process.env.VITE_WS_INTERVAL || 30,
+          "interval": parseInt(process.env.VITE_WS_INTERVAL) || 30,
           "currentTime": OCPPDate()
         }
       ];
@@ -199,16 +202,34 @@ exports.sendCommand = (data) => {
       ];
 
       try {
-        const wsClient = new WebSocket(
-          process.env.VITE_SERVER_WS_HOST + "?point=" + data.point + "&command=heartbeat"
-        );
-    
-        wsClient.on('open', () => {
-            const response = [2, 'heartbeat-' + data.point, 'Heartbeat']
-        
-            wsClient.send(JSON.stringify(response));
-            wsClient.terminate()
-        });
+        // console.log(0, outSideTimer)
+        // if (outSideTimer === timerInterval) {
+        //   console.log(1)
+          const wsClient = new WebSocket(
+            process.env.VITE_SERVER_WS_HOST + "?point=" + data.point + "&command=heartbeat"
+          );
+      
+          wsClient.on('open', () => {
+              const response = [2, 'heartbeat-' + data.point, 'Heartbeat']
+          
+              wsClient.send(JSON.stringify(response));
+
+              // setTimeout(() => {
+              //   console.log(3, outSideTimer)
+              //   // if (outSideTimer <= 0) {
+              //     console.log(4)
+              //     wsClient.close()
+              //   // }
+              // // }, 1000)
+              // }, timerInterval)
+              // wsClient.terminate()
+          });
+        // }
+        // outSideTimer = timerInterval
+
+        // setInterval(() => {
+        //   outSideTimer--
+        // }, timerInterval)
 
         // axios.post(process.env.VITE_SERVER_HOST + "/api/charge-point/heartbeat-out", data);
         // axios.post(process.env.VITE_SERVER_HOST + "/api/charge-point/heartbeat", data);
@@ -272,11 +293,12 @@ exports.sendCommand = (data) => {
     case "Reset":
       message = [
           defaultIndex,
-          key,
+          getId(),
+          "Reset",
           {
             "status": "Accepted",
-            "point": data.point
-            // "type": "Hard"
+            // "point": data.point,
+            "type": "Hard"
           }
       ]
       break;
@@ -288,7 +310,7 @@ exports.sendCommand = (data) => {
             "status": "Accepted"
             // "listVersion": 1,
             // "localAuthorizationList": "",
-            // "updateType": ""
+            // "updateType": "fool"
           }
       ]
       break;

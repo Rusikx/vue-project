@@ -104,7 +104,7 @@ class ChargePointClass {
   deactivate(data) {
     try {
       return ChargePoint.update(
-        { status: STATUS_UNAVAILABLE },
+        // { status: STATUS_UNAVAILABLE },
         { is_active: false },
         { where: { charge_point_serial_number: data.point } }
       )
@@ -121,7 +121,7 @@ class ChargePointClass {
       const wsClient = wsClientStart(data.point, "heartbeat")
       
       wsClient.on('open', () => {
-          const response = [2, 'heartbeat-' + data.point, 'Heartbeat']
+          const response = [2, 'heartbeat-' + data.point, 'Heartbeat', data]
       
           wsClient.send(JSON.stringify(response))
       });
