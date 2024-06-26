@@ -1,18 +1,14 @@
 {
-  "name": "vue-project",
+  "name": "vue-project-frontend",
   "version": "0.0.0",
   "private": true,
-  "type": "commonjs",
-  "type1": "module",
+  "type1": "commonjs",
+  "type": "module",
   "engines": {
     "node": "21.7.*"
   },
-  "main": "server.js",
   "scripts": {
     "vue-dev": "vite",
-    "vue-api": "node --no-warnings=ExperimentalWarning --loader ts-node/esm server.ts",
-    "vue-ws": "node ocpp/server.ts",
-    "vue-ws-c": "node ocpp/client.ts",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "test:unit": "vitest",
@@ -23,13 +19,6 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
   },
-  "keywords": [
-    "node js",
-    "jwt",
-    "authentication",
-    "express",
-    "postgresql"
-  ],
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",

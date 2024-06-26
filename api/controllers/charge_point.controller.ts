@@ -1,5 +1,5 @@
 // const WebSocket = require("ws")
-const ChargePointClass = require("./../../api/classes/ChargePointClass.ts")
+const ChargePointClass = require("./../classes/ChargePointClass.ts")
 
 const chargePointClass = new ChargePointClass()
 

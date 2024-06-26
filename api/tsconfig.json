@@ -1,0 +1,25 @@
+{
+  // "files": [],
+  // "references": [
+  //   {
+  //     "path": "./tsconfig.node.json"
+  //   },
+  //   {
+  //     "path": "./tsconfig.app.json"
+  //   },
+  //   {
+  //     "path": "./tsconfig.vitest.json"
+  //   }
+  // ],
+  "compilerOptions": {
+    "target": "es2016",
+    // "target": "esnext",
+    // "module": "NodeNext",
+    // "module": "commonjs",
+    // "types": ["vuetify"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}

@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
-import AuthService from './../../api/services/auth';
+import AuthService from './../../../api/services/auth';
 
 const user = JSON.parse(localStorage.getItem('user'));
 const initialState = user

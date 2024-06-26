@@ -1,10 +1,10 @@
 const WebSocket = require("ws")
 const url = require("url")
-const db = require("./../../api/models/connect.models.ts")
-db.charge_point = require("./../../api/models/charge_points.model.ts")(db.sequelize, db.Sequelize)
+const db = require("./../models/connect.models.ts")
+db.charge_point = require("./../models/charge_points.model.ts")(db.sequelize, db.Sequelize)
 db.connectors = require("./../models/connectors.model.ts")(db.sequelize, db.Sequelize);
 
-const { STATUS_AVAILABLE, STATUS_UNAVAILABLE } = require("./../../api/constans/index.ts")
+const { STATUS_AVAILABLE, STATUS_UNAVAILABLE } = require("./../constans/index.ts")
 
 const ChargePoint = db.charge_point
 const Connectors = db.connectors
