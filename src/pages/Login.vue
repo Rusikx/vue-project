@@ -1,56 +1,52 @@
-<script lang="ts">
-import { ref} from "vue";
+<script lang="ts" setup>
+import { ref } from "vue"
 import { useRouter } from 'vue-router'
-import { useField, useForm } from "vee-validate";
-import * as yup from "yup";
+import { useField, useForm } from "vee-validate"
+import * as yup from "yup"
 import { storeToRefs } from 'pinia'
 import { useAuthModuleStore } from "./../stores/auth.module"
 
-export default {
-  setup() {
-    const router = useRouter();
-    const loading = ref(false);
-    const message = ref("");
+const router = useRouter()
+const loading = ref(false)
+const message = ref("")
 
-    const validationSchema = yup.object().shape({
-      email: yup.string().email().required(),
-      password: yup.string().required(),
-    });
+const validationSchema = yup.object().shape({
+  email: yup.string().email().required(),
+  password: yup.string().required(),
+})
 
-    const { handleSubmit, handleReset } = useForm({
-      validationSchema,
-    });
+const { handleSubmit, handleReset } = useForm({
+  validationSchema,
+})
 
-    const email = useField('email', validationSchema);
-    const password = useField('password', validationSchema);
+const email = useField('email', validationSchema)
+const password = useField('password', validationSchema)
 
-    const onSubmit = handleSubmit(async (values) => {
-      loading.value = true;
+const onSubmit = handleSubmit(async (values) => {
+  loading.value = true
 
-      const authModuleStore = useAuthModuleStore();
+  const authModuleStore = useAuthModuleStore()
 
-      authModuleStore.login(values).then(() => {
-        router.push("/profile");
-      }, (error) => {
-        loading.value = false;
-        message.value = (
-            error.response &&
-            error.response.data &&
-            error.response.data.message
-        ) || error.message || error.toString();
-      });
-    });
+  authModuleStore.login(values).then(() => {
+    router.push("/profile")
+  }, (error) => {
+    loading.value = false;
+    message.value = (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+    ) || error.message || error.toString()
+  })
+})
 
-    return {
-      loading,
-      message,
-      email,
-      password,
-      onSubmit,
-      handleReset
-    };
-  }
-};
+// return {
+//   loading,
+//   message,
+//   email,
+//   password,
+//   onSubmit,
+//   handleReset
+// }
 </script>
 
 <template>

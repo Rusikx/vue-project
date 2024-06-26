@@ -26,13 +26,16 @@ exports.sendCommand = (data) => {
   let message;
 
   switch (command) {
+    case "CustomCommand":
+      message = data;
+      break;
     case "BootNotification":
       message = [
         createIndex,
         key,
         {
           "status": STATUS_ACCEPTED,
-          "interval": parseInt(process.env.VITE_WS_INTERVAL) || 30,
+          "interval": timerInterval,
           "currentTime": OCPPDate()
         }
       ];
@@ -297,7 +300,7 @@ exports.sendCommand = (data) => {
           "Reset",
           {
             "status": "Accepted",
-            // "point": data.point,
+            "point": data.point,
             "type": "Hard"
           }
       ]
@@ -409,13 +412,7 @@ exports.sendCommand = (data) => {
           }
       ]
       break;
-    /*case "Heartbeat":
-      message = {}
-      break;
-    case "BootNotification":
-      message = metaData.bootNotification
-      break;
-    case "Authorize":
+    /*case "Authorize":
       message = { idTag: metaData.RFIDTag }
       break;
     case "StatusNotification":
