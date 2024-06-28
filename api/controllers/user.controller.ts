@@ -1,15 +1,27 @@
-exports.allAccess = (req, res) => {    
-  res.status(200).send("Public Content.");
-};
+import { Request, Response, NextFunction } from 'express'
 
-exports.userBoard = (req, res) => {
-  res.status(200).send("User Content.");
-};
+/**	Creates a callback that proxies node callback style arguments to an Express Response object.
+ *	@param { Request } req	Express HTTP Request
+ *	@param { Response } res	Express HTTP Response
+ *
+ *	@example
+ *		list(req, res) {
+ *			collection.find({}, toRes(res));
+ *		}
+ */
 
-exports.adminBoard = (req, res) => {
-  res.status(200).send("Admin Content.");
-};
+export function allAccess(req: Request, res: Response) {
+  res.status(200).send("Public Content.")
+}
 
-exports.moderatorBoard = (req, res) => {
-  res.status(200).send("Moderator Content.");
-};
+export function userBoard(req: Request, res: Response) {
+  res.status(200).send("User Content.")
+}
+
+export function adminBoard(req: Request, res: Response) {
+  res.status(200).send("Admin Content.")
+}
+
+export function moderatorBoard(req: Request, res: Response) {
+  res.status(200).send("Moderator Content.")
+}

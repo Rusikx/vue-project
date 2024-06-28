@@ -1,9 +1,9 @@
 // const db = require("./database.ts");
-const users = require("./users.ts");
-const networks = require("./networks.ts");
+import users from "./users.ts"
+import networks from "./networks.ts"
 
-module.exports = () => {
-  // db();
-  users();
-  networks();
-};
+// db();
+users()
+networks()
+
+export default () => {}

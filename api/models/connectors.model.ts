@@ -1,4 +1,4 @@
-module.exports = (sequelize, Sequelize) => {
+export default (sequelize, Sequelize) => {
   const Connectors = sequelize.define("connectors", {
     connector_id: {
       type: Sequelize.INTEGER,
@@ -28,7 +28,7 @@ module.exports = (sequelize, Sequelize) => {
     //     type: Sequelize.BOOLEAN,
     //     allowNull: true
     // }
-  });
+  })
 
-  return Connectors;
-};
+  return Connectors
+}

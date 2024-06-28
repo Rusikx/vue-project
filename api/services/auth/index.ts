@@ -1,7 +1,7 @@
-import axios from 'axios';
-import bcrypt from 'bcryptjs';
+import axios from 'axios'
+import bcrypt from 'bcryptjs'
 
-const API_URL = import.meta.env.VITE_SERVER_HOST + '/api/auth/';
+const API_URL = import.meta.env.VITE_SERVER_HOST + '/api/auth/'
 
 class AuthService {
   login(user) {
@@ -10,15 +10,15 @@ class AuthService {
       password: user.password
     }).then(response => {
       if (response.data.accessToken) {
-        localStorage.setItem('user', JSON.stringify(response.data));
+        localStorage.setItem('user', JSON.stringify(response.data))
       }
 
-      return response.data;
-    });
+      return response.data
+    })
   }
 
   logout() {
-    localStorage.removeItem('user');
+    localStorage.removeItem('user')
   }
 
   register(user) {
@@ -31,4 +31,4 @@ class AuthService {
   }
 }
 
-export default new AuthService();
+export default new AuthService()

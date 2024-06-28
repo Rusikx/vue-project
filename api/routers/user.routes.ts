@@ -1,25 +1,30 @@
-const { verifyToken, isModerator, isAdmin } = require("./../middleware/authJwt.ts");
-const controller = require("./../controllers/user.controller.ts");
+import { Router } from 'express'
+// import { verifyToken, isModerator, isAdmin } from "./../middleware/authJwt.ts"
+import * as controller from "./../controllers/user.controller.ts"
 
 
-module.exports = function(app) {
-  app.get("/api/test/all", controller.allAccess);
+const API_URL = "/api/test/"
 
-  app.get(
-    "/api/test/user",
-    [verifyToken],
-    controller.userBoard
-  );
+let api = Router()
 
-  app.get(
-    "/api/test/mod",
-    [verifyToken, isModerator],
-    controller.moderatorBoard
-  );
+api.get(API_URL + "all", controller.allAccess)
 
-  app.get(
-    "/api/test/admin",
-    [verifyToken, isAdmin],
-    controller.adminBoard
-  );
-};
+api.get(
+  API_URL + "user",
+  // [verifyToken],
+  controller.userBoard
+)
+
+api.get(
+  API_URL + "mod",
+  // [verifyToken, isModerator],
+  controller.moderatorBoard
+)
+
+api.get(
+  API_URL + "admin",
+  // [verifyToken, isAdmin],
+  controller.adminBoard
+)
+
+export default api

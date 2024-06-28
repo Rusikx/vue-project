@@ -1,11 +1,13 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const dotenv = require("dotenv");
+import express from "express"
+import bodyParser from "body-parser"
+import cors from "cors"
+import dotenv from "dotenv"
+import api from './routers/index.routes.ts'
+import migrations from "./migrations/index.ts"
 
-dotenv.config();
-const app = express();
-app.use(cors());
+dotenv.config()
+const app = express()
+app.use(cors())
 
 // const corsOptions = {
 //     // "origin": "*",
@@ -43,17 +45,18 @@ app.use(cors());
 // });
 
 // parse requests of content-type - application/json
-app.use(bodyParser.json());
+app.use(bodyParser.json())
 
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
-
-require('./routers/index.routes.ts')(app);
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // set port, listen for requests
-const PORT = process.env.VITE_SERVER_PORT || 8081;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}.`);
-});
+const PORT = process.env.VITE_SERVER_PORT || 8081
 
-require("./migrations/index.ts");
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}.`)
+})
+app.use(api)
+migrations()
+
+export default app

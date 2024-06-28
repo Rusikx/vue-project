@@ -1,21 +1,24 @@
-const db = require("./../models/connect.models.ts");
+import { Request, Response, NextFunction } from 'express'
 
-db.charge_point = require("./../models/charge_points.model.ts")(db.sequelize, db.Sequelize);
-db.connectors = require("./../models/connectors.model.ts")(db.sequelize, db.Sequelize);
+import db from "./../models/connect.models.ts"
+import chargePointsModel from "./../models/charge_points.model.ts"
+import connectorsModel from "./../models/connectors.model.ts"
+import { STATUS_AVAILABLE } from "./../constans/index.ts"
 
-const { STATUS_AVAILABLE } = require("./../constans/index.ts");
 
-// const Networks = db.networks;
-const ChargePoint = db.charge_point;
-const Connectors = db.connectors;
+db.charge_point = chargePointsModel(db.sequelize, db.Sequelize)
+db.connectors = connectorsModel(db.sequelize, db.Sequelize)
+
+const ChargePoint = db.charge_point
+const Connectors = db.connectors
 
 ChargePoint.hasMany(Connectors, {
   foreignKey: "charge_point_id"
-});
-Connectors.belongsTo(ChargePoint);
+})
+Connectors.belongsTo(ChargePoint)
 
-exports.create = async (req, res) => {
-  const data = req.body[3];
+export async function create(req: Request, res: Response) {
+  const data = req.body[3]
 
   try {
     const response = await ChargePoint.findOne({
@@ -45,18 +48,18 @@ exports.create = async (req, res) => {
 
     res.send(response)
   } catch (err) {
-    res.status(500).send({ message: err.message });
-  };
+    res.status(500).send({ message: err.message })
+  }
 }
 
-exports.all = async (req, res) => {
+export async function all(req: Request, res: Response) {
   try {
     const response = await Connectors.findAll()
 
     res.send(response)
   } catch (err) {
-    res.status(500).send({ message: err.message });
-  };
+    res.status(500).send({ message: err.message })
+  }
 }
 
 // exports.active = async (req, res) => {
@@ -65,6 +68,6 @@ exports.all = async (req, res) => {
 
 //     res.send(response)
 //   } catch (err) {
-//     res.status(500).send({ message: err.message });
-//   };
+//     res.status(500).send({ message: err.message })
+//   }
 // }

@@ -1,45 +1,40 @@
-<script lang="ts">
+<script lang="ts" setup>
+import { onMounted, ref } from "vue"
 import axios from "axios"
-import Nav from "@/components/Nav.vue"
-// import UserService from "./../../api/services/auth/user.service.ts";
 
-export default {
-  name: "Home",
-  components: {
-    Nav
-  },
-  data() {
-    return {
-      content: "",
-    };
-  },
-  mounted() {
-    try {
-      const API_URL = import.meta.env.VITE_SERVER_HOST + "/api/test/";
+const API_URL = import.meta.env.VITE_SERVER_HOST + "/api/test/"
 
-      axios.get(API_URL + "all").then((response) => {
-        this.content = response.data
-      });
-    } catch (err) {
-      console.log(err)
-    }
-    // UserService.getPublicContent().then(
-    //   (response) => {
-    //     this.content = response.data;
-    //   },
-    //   (error) => {
-    //     this.content =
-    //       (
-    //         error.response &&
-    //         error.response.data &&
-    //         error.response.data.message
-    //       ) ||
-    //       error.message ||
-    //       error.toString();
-    //   }
-    // );
-  },
-};
+let content = ref("")
+
+const getAll = () => {
+  try {
+    axios.get(API_URL + "all").then((response) => {
+      content.value = response.data
+    })
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+onMounted(() => {
+  getAll()
+  
+  // UserService.getPublicContent().then(
+  //   (response) => {
+  //     this.content = response.data;
+  //   },
+  //   (error) => {
+  //     this.content =
+  //       (
+  //         error.response &&
+  //         error.response.data &&
+  //         error.response.data.message
+  //       ) ||
+  //       error.message ||
+  //       error.toString();
+  //   }
+  // );
+})
 </script>
 
 <template>

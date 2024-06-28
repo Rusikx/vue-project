@@ -1,10 +1,14 @@
-const WebSocket = require("ws")
-const url = require("url")
-const db = require("./../models/connect.models.ts")
-db.charge_point = require("./../models/charge_points.model.ts")(db.sequelize, db.Sequelize)
-db.connectors = require("./../models/connectors.model.ts")(db.sequelize, db.Sequelize);
+import { Request, Response, NextFunction } from 'express'
+import { WebSocket } from "ws"
+import url from "url"
 
-const { STATUS_AVAILABLE, STATUS_UNAVAILABLE } = require("./../constans/index.ts")
+import db from "./../models/connect.models.ts"
+import chargePointsModel from "./../models/charge_points.model.ts"
+import connectorsModel from "./../models/connectors.model.ts"
+import { STATUS_AVAILABLE, STATUS_UNAVAILABLE } from "./../constans/index.ts"
+
+db.charge_point = chargePointsModel(db.sequelize, db.Sequelize)
+db.connectors = connectorsModel(db.sequelize, db.Sequelize)
 
 const ChargePoint = db.charge_point
 const Connectors = db.connectors
@@ -18,7 +22,7 @@ Connectors.belongsTo(ChargePoint)
 //   return new WebSocket.Server({ port: process.env.VITE_SERVER_WS_PORT})
 // })
 
-const wsClientStart = ((point, command) => {
+const wsClientStart = ((point: string, command: string) => {
   return new WebSocket(process.env.VITE_WS_HOST + "?point=" + point + "&command=" + command)
 })
 
@@ -44,7 +48,7 @@ class ChargePointClass {
       })
     } catch (err) {
        return { message: err.message }
-    };
+    }
   }
 
   all() {
@@ -52,7 +56,7 @@ class ChargePointClass {
       return ChargePoint.findAll()
     } catch (err) {
       return { message: err.message }
-    };
+    }
   }
   
   allCascade() {
@@ -86,7 +90,7 @@ class ChargePointClass {
       })
     } catch (err) {
       return { message: err.message }
-    };
+    }
   }
 
   activate(data) {
@@ -98,7 +102,7 @@ class ChargePointClass {
       )
     } catch (err) {
       return { message: err.message }
-    };
+    }
   }
   
   deactivate(data) {
@@ -110,11 +114,11 @@ class ChargePointClass {
       )
     } catch (err) {
       return { message: err.message }
-    };
+    }
   }
 
   // WS
-  heartbeat(req, res) {
+  heartbeat(req: Request, res: Response) {
     const data = req.body
   
     try {
@@ -124,7 +128,7 @@ class ChargePointClass {
           const response = [2, 'heartbeat-' + data.point, 'Heartbeat', data]
       
           wsClient.send(JSON.stringify(response))
-      });
+      })
   
       res.send(true)
     } catch (err) {
@@ -132,7 +136,7 @@ class ChargePointClass {
     }
   }
 
-  async dataAllCascade(req, res) {
+  async dataAllCascade(req: Request, res: Response) {
     let response = []
 
     try {
@@ -154,4 +158,4 @@ class ChargePointClass {
   }
 }
 
-module.exports = ChargePointClass
+export default ChargePointClass

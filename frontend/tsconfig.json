@@ -15,7 +15,7 @@
     "target": "es2016",
     // "target": "esnext",
     // "module": "NodeNext",
-    "module": "commonjs",
+    // "module": "commonjs",
     // "types": ["vuetify"],
     "strict": true,
     "esModuleInterop": true,

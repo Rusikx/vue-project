@@ -1,22 +1,21 @@
-const auth = require('./auth.routes.ts');
-const user = require('./user.routes.ts');
+import { Router } from 'express'
+
+import auth from './auth.routes.ts'
+import user from './user.routes.ts'
 // const network = require('./network.routes.ts');
-const chargePoint = require('./charge_point.routes.ts');
-const connector = require('./connector.routes.ts');
+import chargePoint from './charge_point.routes.ts'
+import connector from './connector.routes.ts'
 
-module.exports = function(app) {
-  // simple route
-  app.get("/", (req, res) => {
-    res.json({ message: "Welcome to bezkoder application." });
-  });
 
-  auth(app);
-  user(app);
-  // network(app);
-  chargePoint(app);
-  connector(app);
+let api = Router()
 
-  // require('./api/routers/auth.routes.ts')(app);
-  // require('./api/routers/user.routes.ts')(app);
-  // require('./api/routers/network.routes.ts')(app);
-}
+api.get('/api', (req, res) => {
+  res.json({ message: "Welcome to application." })
+})
+
+api.use(auth)
+api.use(user)
+api.use(chargePoint)
+api.use(connector)
+
+export default api

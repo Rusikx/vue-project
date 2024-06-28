@@ -1,6 +1,13 @@
-const config = require("./../config/db.config.ts");
+import { Sequelize } from "sequelize"
 
-const Sequelize = require("sequelize");
+import config from "./../config/db.config.ts"
+import userModel from "./../models/user.model.ts"
+import roleModel from "./../models/role.model.ts"
+// import networksModel from "./../models/networks.model.ts"
+import chargePointsModel from "./../models/charge_points.model.ts"
+import connectorsModel from "./../models/connectors.model.ts"
+
+
 const sequelize = new Sequelize(
   config.DB,
   config.USER,
@@ -15,26 +22,26 @@ const sequelize = new Sequelize(
       idle: config.pool.idle
     }
   }
-);
+)
 
-const db = {};
+const db = {}
 
-db.Sequelize = Sequelize;
-db.sequelize = sequelize;
+db.Sequelize = Sequelize
+db.sequelize = sequelize
 
-db.user = require("../models/user.model.ts")(sequelize, Sequelize);
-db.role = require("../models/role.model.ts")(sequelize, Sequelize);
-db.networks = require("../models/networks.model.ts")(sequelize, Sequelize);
-db.charge_points = require("../models/charge_points.model.ts")(sequelize, Sequelize);
-db.connectors = require("../models/connectors.model.ts")(sequelize, Sequelize);
+db.user = userModel(sequelize, Sequelize)
+db.role = roleModel(sequelize, Sequelize)
+// db.networks = networksModel(sequelize, Sequelize)
+db.charge_points = chargePointsModel(sequelize, Sequelize)
+db.connectors = connectorsModel(sequelize, Sequelize)
 
 db.role.belongsToMany(db.user, {
   through: "user_roles"
-});
+})
 db.user.belongsToMany(db.role, {
   through: "user_roles"
-});
+})
 
-db.ROLES = ["user", "admin", "moderator"];
+db.ROLES = ["user", "admin", "moderator"]
 
-module.exports = db;
+export default db

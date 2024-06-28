@@ -1,16 +1,21 @@
-const { verifySignUp } = require("./../middleware/verifySignUp.ts");
-const controller = require("./../controllers/auth.controller.ts");
+import { Router } from 'express'
+// import { verifySignUp } from "./../middleware/verifySignUp.ts"
+import * as controller from "./../controllers/auth.controller.ts"
 
 
-module.exports = function(app) {
-  app.post(
-    "/api/auth/signup",
-    // [
-    //     verifySignUp.checkDuplicateUsernameOrEmail,
-    //     verifySignUp.checkRolesExisted
-    // ],
-    controller.signup
-  );
+const API_URL = "/api/auth/"
 
-  app.post("/api/auth/signin", controller.signin);
-};
+let api = Router()
+
+api.post(
+  API_URL + "signup",
+  // [
+  //     verifySignUp.checkDuplicateUsernameOrEmail,
+  //     verifySignUp.checkRolesExisted
+  // ],
+  controller.signup
+)
+
+api.post(API_URL + "signin", controller.signin)
+
+export default api

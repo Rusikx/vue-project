@@ -1,9 +1,10 @@
-// const WebSocket = require("ws")
-const ChargePointClass = require("./../classes/ChargePointClass.ts")
+import { Request, Response, NextFunction } from 'express'
+
+import ChargePointClass from "./../classes/ChargePointClass.ts"
 
 const chargePointClass = new ChargePointClass()
 
-exports.create = async (req, res) => {
+export async function create(req: Request, res: Response) {
   const data = req.body[3]
   data.point = req.body.point
 
@@ -14,7 +15,7 @@ exports.create = async (req, res) => {
   }
 }
 
-exports.all = async (req, res) => {
+export async function all(req: Request, res: Response) {
   try {
     res.send(await chargePointClass.all())
   } catch (err) {
@@ -22,7 +23,7 @@ exports.all = async (req, res) => {
   }
 }
 
-exports.allCascade = async (req, res) => {
+export async function allCascade(req: Request, res: Response) {
   try {
     res.send(await chargePointClass.allCascade())
   } catch (err) {
@@ -30,7 +31,7 @@ exports.allCascade = async (req, res) => {
   }
 }
 
-exports.activate = async (req, res) => {
+export async function activate(req: Request, res: Response) {
   const data = req.body[3]
   data.point = req.body.point
 
@@ -41,7 +42,7 @@ exports.activate = async (req, res) => {
   }
 }
 
-exports.deactivate = async (req, res) => {
+export async function deactivate(req: Request, res: Response) {
   const data = req.body[3]
   data.point = req.body.point
 
@@ -52,6 +53,6 @@ exports.deactivate = async (req, res) => {
   }
 }
 
-exports.heartbeat = async (req, res) => {
+export async function heartbeat(req: Request, res: Response) {
   await chargePointClass.heartbeat(req, res)
 }

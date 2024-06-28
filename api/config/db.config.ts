@@ -1,6 +1,9 @@
-require('dotenv').config();
+import { Sequelize } from 'sequelize'
+import dotenv from "dotenv"
 
-module.exports = {
+dotenv.config()
+
+const data = {
   HOST: process.env.VITE_DB_HOST,
   USER: process.env.VITE_DB_USER,
   PASSWORD: process.env.VITE_DB_PASSWORD,
@@ -13,4 +16,6 @@ module.exports = {
     acquire: 30000,
     idle: 10000
   }
-};
+}
+
+export default data

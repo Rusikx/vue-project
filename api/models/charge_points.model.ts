@@ -1,4 +1,4 @@
-module.exports = (sequelize, Sequelize) => {
+export default (sequelize, Sequelize) => {
   const ChargePoints = sequelize.define("charge_points", {
     // status: {
     //     type: Sequelize.STRING,
@@ -56,7 +56,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.BOOLEAN,
       allowNull: true
     },
-  });
+  })
 
-  return ChargePoints;
-};
+  return ChargePoints
+}

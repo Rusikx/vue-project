@@ -1,3 +1,3 @@
-module.exports = {
-  secret: "bezkoder-secret-key"
-};
+export default {
+  secret: "secret-key"
+}

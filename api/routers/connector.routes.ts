@@ -1,12 +1,23 @@
-const { verifyToken, isModerator, isAdmin } = require("./../middleware/authJwt.ts");
-const controller = require("./../controllers/connector.controller.ts");
+import { Router } from 'express'
 
-const API_URL = "/api/connector/";
+import { verifyToken, isModerator, isAdmin } from "./../middleware/authJwt.ts"
+import * as controller from "./../controllers/connector.controller.ts"
 
-module.exports = function(app) {
-  app.post(
-    API_URL + "create",
-    // [verifyToken, isAdmin],
-    controller.create
-  );
-};
+
+const API_URL = "/api/connector/"
+
+let api = Router()
+
+api.post(
+  API_URL + "create",
+  // [verifyToken, isAdmin],
+  controller.create
+)
+
+api.get(
+  API_URL + "all",
+  // [verifyToken, isAdmin],
+  controller.all
+)
+
+export default api

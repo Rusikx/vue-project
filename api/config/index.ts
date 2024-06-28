@@ -1,7 +1,7 @@
-const authJwt = require("./../middleware/authJwt.ts");
-const verifySignUp = require("./../middleware/verifySignUp.ts");
+import * as authJwt from "./../middleware/authJwt.ts"
+import verifySignUp from "./../middleware/verifySignUp.ts"
 
-module.exports = {
+export default {
   authJwt,
   verifySignUp
-};
+}
