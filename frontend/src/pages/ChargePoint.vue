@@ -10,6 +10,7 @@ import ChargePointClass from "./../../api/classes/ChargePointClass.ts"
 
 const API_URL = import.meta.env.VITE_SERVER_HOST + "/api/charge-point/"
 const chargePoints = ref([])
+const logs = ref('')
 
 const validationSchema = yup.object().shape({
   command: yup.string().required()
@@ -22,8 +23,6 @@ const { handleSubmit } = useForm({
 const command = useField('command', validationSchema)
 
 const runCustomCommand = handleSubmit(async (values, point) => {
-  console.log(values.replace(" ", "").split(','))
-  console.log(values, point)
   // axios.post(API_URL + "custom-command", { data: values, point });
   try {
     const wsClient = new WebSocket(
@@ -31,19 +30,19 @@ const runCustomCommand = handleSubmit(async (values, point) => {
     )
     
     wsClient.addEventListener("open", () => {
-      const query = JSON.stringify(values.replace(" ", "")
-        .split(',')
-        .splice(1, 0, "data-start", "CustomCommand"))
+      // const query = JSON.stringify(values.replace(" ", "")
+      //   .split(',')
+      //   .splice(1, 0, "data-start", "CustomCommand"))
 
-      console.log(query)
-      // command = query
+      
+      logs.value = logs.value + '\n' + values
 
-      // wsClient.send(query)
+      wsClient.send(values)
     })
 
-    // await wsClient.addEventListener("message", (message) => {
-    //   command = message.data
-    // })
+    await wsClient.addEventListener("message", (message) => {
+      logs.value = logs.value + '\n' + message.data
+    })
   } catch (err) {
     console.log(err)
   }
@@ -173,18 +172,20 @@ onMounted(() => {
           </v-card>
 
           <v-divider></v-divider>
-              <v-textarea
-                v-model="command.value.value"
-                label="Label"
-                model-value2="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
-                name="input-7-1"
-                variant="filled"
-                auto-grow
-              ></v-textarea>
-              <v-btn
-                variant ="outlined"
-                @click.prevent="runCustomCommand(chargePoint.charge_point_serial_number)"
-              >Run</v-btn>
+          <v-textarea
+            v-model="command.value.value"
+            label="Format: index, code, command, params(Object)"
+            model-value2="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
+            name="input-7-1"
+            variant="filled"
+            auto-grow
+          ></v-textarea>
+          <v-btn
+            variant ="outlined"
+            @click.prevent="runCustomCommand(chargePoint.charge_point_serial_number)"
+          >Run</v-btn>
+          <v-divider></v-divider>
+          {{ logs }}
         </v-col>
       </template>
     </v-row>

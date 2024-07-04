@@ -1,0 +1,70 @@
+version: "3.8"
+
+services:
+
+  frontend:
+    container_name: frontend
+    restart: always
+    image: node:21.07-bullseye
+    volumes:
+      - ./frontend:/vue-project/frontend
+    ports:
+      - "${VITE_FRONT_PORT}:${VITE_FRONT_PORT}"
+    # networks:
+    #   - app-network
+    command: >
+      sh -c "cd /vue-project/frontend &&
+             npm install && 
+             npm dev --port ${VITE_FRONT_PORT} --host 0.0.0.0"
+    # depends_on:
+    #   api:
+    #     condition: service_healthy
+
+  # db:
+  #   image: postgres:15.3-bullseye
+  #   restart: always
+  #   container_name: db
+  #   volumes:
+  #     - ./db_data/postgres:/var/lib/postgres
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - "${DB_PORT}:5432"
+  #   environment:
+  #     POSTGRES_USER: "${DB_USER}"
+  #     POSTGRES_PASSWORD: "${DB_PASSWORD}"
+  #     POSTGRES_DB: "${DB_NAME}"
+  #     PGDATA: "/var/lib/postgres"
+  #   healthcheck:
+  #     test: "exit 0"
+  #   networks:
+  #     - app-network
+
+  # api:
+  #   container_name: api
+  #   build:
+  #     context: .
+  #   volumes:
+  #     - ./backend:/vue-project/backend
+  #   ports:
+  #     - "${HTTP_SERVER_PORT}:${HTTP_SERVER_PORT}"
+  #   env_file:
+  #     - .env
+  #   # networks:
+  #   #   - app-network
+  #   restart: always
+  #   command: >
+  #     sh -c "cd /vue-project/backend && \
+  #            alembic upgrade head && \
+  #            cd api && \
+  #            uvicorn main:app --host 0.0.0.0 --port ${HTTP_SERVER_PORT} --reload"
+  #   # depends_on:
+  #   #   db:
+  #   #     condition: service_healthy
+  #   healthcheck:
+  #     test: "exit 0"
+
+# networks:
+#   app-network:
+#     driver: bridge
+

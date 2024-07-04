@@ -1,14 +1,14 @@
-FROM node:18-alpine
+FROM node:21-alpine
 
 WORKDIR /vue-project
 
-COPY . .
+# COPY . .
 
 # RUN mkdir -p /ocpp/backend
 # RUN mkdir -p /ocpp/frontend
 
-RUN npm install --production
+# RUN npm install --production
 
-CMD ["node", "/vue-project/server.ts"]
+# EXPOSE 8081
 
-EXPOSE 3000
+# CMD ["node"]

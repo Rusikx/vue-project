@@ -61,10 +61,10 @@ wsClient.on('message', (message) => {
                         const response = [2, getId(), 'Heartbeat', {}]
 
                         wsClient.send(JSON.stringify(response));
-                    }, 1000 * i)
+                    }, 10000 * i)
                 })(i++)
             }
-        }, 1000)
+        }, 10000)
     }
 });
 

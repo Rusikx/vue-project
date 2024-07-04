@@ -14,29 +14,29 @@ wsServer.on('connection', (wsClient, req) => {
     console.log('Пользователь отключился');
   });
 
-  // var timerRestart = 0;
+  var timerRestart = 0;
 
-  // wsClient.on('message', function(message) {
-  //   try {
-  //     const data = { ... JSON.parse(message), ...queryParams };
+  wsClient.on('message', function(message) {
+    try {
+      const data = { ... JSON.parse(message), ...queryParams };
 
-  //     if (data.point) {
-  //       const sendResponse = sendCommand(data);
-  //       const response = JSON.parse(sendResponse);
-  //       // console.log(sendResponse)
-  //       // console.log(response)
+      if (data.point) {
+        const sendResponse = sendCommand(data);
+        const response = JSON.parse(sendResponse);
+        // console.log(sendResponse)
+        // console.log(response)
 
-  //       if (
-  //         sendResponse !== null &&
-  //         data.point === response[2].point
-  //       ) {
-  //         wsClient.send(sendResponse);
-  //       }
-  //     }
-  //   } catch (error) {
-  //     wsClient.status(500).send({ message: error.message });
-  //   }
-  // });
+        if (
+          sendResponse !== null &&
+          data.point === response[2].point
+        ) {
+          wsClient.send(sendResponse);
+        }
+      }
+    } catch (error) {
+      wsClient.status(500).send({ message: error.message });
+    }
+  });
 });
 
 console.log('Сервер запущен на ' + process.env.VITE_WS_PORT + ' порту');

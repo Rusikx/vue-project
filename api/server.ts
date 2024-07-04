@@ -50,13 +50,14 @@ app.use(bodyParser.json())
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }))
 
+app.use(api)
+migrations()
+
 // set port, listen for requests
 const PORT = process.env.VITE_SERVER_PORT || 8081
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`)
 })
-app.use(api)
-migrations()
 
 export default app

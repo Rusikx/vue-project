@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { WebSocket } from "ws"
+import { WebSocketServer } from "ws"
 import url from "url"
 
 import db from "./../../models/connect.models.ts"
@@ -12,7 +12,7 @@ db.charge_point = chargePointsModel(db.sequelize, db.Sequelize)
 const ChargePoint = db.charge_point
 
 const wsServerStart = (() => {
-  return new WebSocket.Server({ port: process.env.VITE_SERVER_WS_PORT})
+  return new WebSocketServer({ port: process.env.VITE_SERVER_WS_PORT})
 })
 
 const wsClientStart = ((point: string, command: string) => {
@@ -68,7 +68,6 @@ export function heartbeat(req: Request, res: Response) {
 
       wsClient.on('message', async (message) => {
         const params = { ... JSON.parse(message), ...queryParams }
-        // console.log(params)
   
         // if (data.point === params.point) {
         if (params.point) {

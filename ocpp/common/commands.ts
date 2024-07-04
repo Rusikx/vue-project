@@ -36,7 +36,8 @@ exports.sendCommand = (data) => {
         {
           "status": STATUS_ACCEPTED,
           "interval": timerInterval,
-          "currentTime": OCPPDate()
+          "currentTime": OCPPDate(),
+          "point": data.point
         }
       ];
       
@@ -304,6 +305,7 @@ exports.sendCommand = (data) => {
             "type": "Hard"
           }
       ]
+      // 3, { "status": "Accepted", "point": 565655, "type": "Hard"}
       break;
     case "SendLocalList":
       message = [
